@@ -7,8 +7,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const listingSchema = require("./schema.js");
-const validateListing = require("./utils/validateListing.js");
+const {validateListing,validateReview} = require("./utils/validate.js");
+const Review = require("./models/review.js");
 
 app.set("views",path.join(__dirname,"views"));
 app.set("view engine","ejs");
@@ -87,6 +87,17 @@ app.delete("/listings/:id",wrapAsync(async (req,res)=>{
     let {id}=req.params;
     await Listing.findByIdAndDelete(id);
     res.redirect("/listings");
+}));
+
+//Reviews
+//Post Route
+app.post("/listings/:id/reviews",validateReview,wrapAsync(async (req,res)=>{
+    let review=new Review(req.body.review);
+    let listing=await Listing.findById(req.params.id);
+    listing.reviews.push(review);
+    await review.save();
+    let result=await listing.save();
+    res.send(result);
 }));
 
 app.use((req, res, next) => {
