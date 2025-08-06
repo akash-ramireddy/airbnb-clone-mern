@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const session = require("express-session");
+const flash = require("connect-flash");
 
-const Listing = require("./models/listing.js");
-const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const listings = require("./routes/listings.js");
 const reviews = require("./routes/reviews.js");
@@ -19,6 +19,18 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,"public")));
 app.engine("ejs",ejsMate);
+
+const sessionOptions={
+    secret:"mysupersecretcode",
+    resave:false,
+    saveUninitialized:true,
+    cookie:{
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+    }
+};
+
 
 const port = 8080;
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -38,11 +50,18 @@ app.listen(port,()=>{
     console.log(`Listening on port ${port}`);
 });
 
-//Home Route
-app.get("/",wrapAsync(async (req,res)=>{
-    const allListings=await Listing.find({});
-    res.render("listings/index.ejs",{allListings});
-}));
+//Root Route
+app.get("/",(req,res)=>{
+    res.send("Root Route");
+});
+
+app.use(session(sessionOptions));
+app.use(flash());
+app.use((req,res,next)=>{
+    res.locals.success=req.flash("success");
+    res.locals.error=req.flash("error");
+    next();
+});
 
 app.use("/listings",listings);
 app.use("/listings/:id/reviews",reviews);
