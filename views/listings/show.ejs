@@ -1,5 +1,9 @@
 <% layout("/layouts/boilerplate") %>
 <body>
+    <script>
+        const mapToken = "<%= process.env.MAP_TOKEN %>";
+        const coordinates = '<%- JSON.stringify(listing.geometry.coordinates) %>';
+    </script>
     <div class="row mt-3">
         <div class="col-8 offset-3">
             <h3><%= listing.title %></h3>
@@ -54,25 +58,33 @@
                 </form>
             <% } %>
             <hr>
-            <p><b>All Reviews</b></p>
-            <div class="row">
-                <% for (review of listing.reviews){ %>
-                    <div class="card col-5 ms-3 mb-3">
-                        <div class="card-body">
-                            <h5 class="card-little">@<%= review.author.username %></h5>
-                            <p class="card-text"><%= review.comment %></p>
-                            <p class="starability-result card-text" data-rating="<%= review.rating %>">
-                                Rated: 3 stars
-                            </p>
-                            <% if (currUser && currUser._id.equals(review.author._id)) {%>
-                            <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                                <button class="btn btn-sm btn-dark">Delete Review</button>
-                            </form>
-                            <% } %>
+            <% if(listing.reviews.length>0){ %>
+                <div class="row">
+                    <p><b>All Reviews</b></p>
+                    <% for (review of listing.reviews){ %>
+                        <div class="card col-5 ms-3 mb-3">
+                            <div class="card-body">
+                                <h5 class="card-little">@<%= review.author.username %></h5>
+                                <p class="card-text"><%= review.comment %></p>
+                                <p class="starability-result card-text" data-rating="<%= review.rating %>">
+                                    Rated: 3 stars
+                                </p>
+                                <% if (currUser && currUser._id.equals(review.author._id)) {%>
+                                <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                    <button class="btn btn-sm btn-dark">Delete Review</button>
+                                </form>
+                                <% } %>
+                            </div>
                         </div>
-                    </div>
-                <% } %>
+                    <% } %>
+                </div>
+            <% } %>
+            <div clss="col-8 offset-3 mb-3">
+                <h3>Where you'll be</h3>
+                <div id="map"></div>
             </div>
         </div>
     </div>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js"></script>
+    <script src="/js/map.js"></script>
 </body>
