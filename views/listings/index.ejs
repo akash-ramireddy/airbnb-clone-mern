@@ -1,16 +1,16 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
 <style>
-    #filters{
-        display:flex;
+    #filters {
+        display: flex;
         flex-wrap: wrap;
         align-items: center;
+        gap: 2rem;
     }
 
     .filter{
         text-align: center;
-        margin-right: 2rem;
-        margin-top: 2rem;
+        margin: 0;
         opacity: 0.7;
     }
 
@@ -27,53 +27,102 @@
         display: none;
     }
 
-    .tax-toggle{
-        border: 1px solid black;
-        border-radius: 1rem;
-        height: 3.5rem;
-        padding: 1rem;
-        margin-left: 15rem;
+    .tax-toggle {
         display: flex;
         align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        padding: 0.5rem 1rem;
+        border: 1px solid black;
+        border-radius: 1rem;
+
+        height: auto;
+        opacity: 0.7;
+        transition: transform 0.2s, color 0.2s;
+    }
+
+    .tax-toggle:hover {
+        opacity: 1;
+        transform: scale(1.05);
+        cursor: pointer;
+    }
+
+    #filters .filter a {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #filters .filter {
+        cursor: pointer;
+        padding: 10px;
+        transition: transform 0.2s, color 0.2s;
+    }
+
+    #filters .filter:hover {
+        transform: scale(1.1);
+        color: #ff5a5f;
     }
 </style>
 <div id="filters">
     <div class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
+        <a href="/listings/category/Trending">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+        </a>
     </div>
     <div class="filter">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
+        <a href="/listings/category/Rooms">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </a>
     </div>
     <div class="filter">
-        <div><i class="fa-solid fa-mountain-city"></i></div>
-        <p>Iconic cities</p>
+        <a href="/listings/category/Iconic cities">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Iconic cities</p>
+        </a>
     </div>
     <div class="filter">
-        <div><i class="fa-solid fa-mountain-sun"></i></div>
-        <p>Mountains</p>
+        <a href="/listings/category/Mountains">
+            <div><i class="fa-solid fa-mountain-sun"></i></div>
+            <p>Mountains</p>
+        </a>
     </div>
     <div class="filter">
-        <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castles</p>
+        <a href="/listings/category/Castles">
+            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            <p>Castles</p>
+        </a>
     </div>
     <div class="filter">
-        <div><i class="fa-solid fa-person-swimming"></i></div>
-        <p>Amazing pools</p>
+        <a href="/listings/category/Amazing pools">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing pools</p>
+        </a>
     </div>
     <div class="filter">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
+        <a href="/listings/category/Camping">
+            <div><i class="fa-solid fa-campground"></i></div>
+            <p>Camping</p>
+        </a>
     </div>
     <div class="filter">
-        <div><i class="fa-solid fa-tractor"></i></div>
-        <p>Farms</p>
+        <a href="/listings/category/Farms">
+            <div><i class="fa-solid fa-tractor"></i></div>
+            <p>Farms</p>
+        </a>
     </div>
     <div class="filter">
+        <a href="/listings/category/Beaches">
         <div><i class="fa-solid fa-umbrella-beach"></i></div>
         <p>Beaches</p>
+        </a>
     </div>
+
     <div class="tax-toggle">
         <div class="form-check-reverse form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
@@ -81,6 +130,7 @@
         </div>
     </div>
 </div>
+
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
     <% for(let listing of allListings){ %>
         <a href="/listings/<%= listing._id %>" class="listing-link">

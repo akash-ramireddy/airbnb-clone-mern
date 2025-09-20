@@ -8,7 +8,7 @@ const Listing=require("../models/listing.js");
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = process.env.ATLASDB_URL;
 
 async function main(){
     await mongoose.connect(MONGO_URL);
@@ -23,7 +23,7 @@ main()
 
 const initDB=async()=>{
     await Listing.deleteMany({});
-    initData.data=initData.data.map((obj)=>({...obj,owner:'68972329d2cb7199cb5614a7'}));
+    initData.data=initData.data.map((obj)=>({...obj,owner:'68cec4e05b377d1a42fc945d'}));
     for (let listing of initData.data) {
         let response = await geocodingClient
             .forwardGeocode({

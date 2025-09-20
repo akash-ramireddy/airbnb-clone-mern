@@ -8,6 +8,12 @@ module.exports.index=async (req,res)=>{
     res.render("listings/index.ejs",{allListings});
 };
 
+module.exports.getCategoryListing = async(req,res) => {
+    const { category } = req.params;
+    const categoryListings = await Listing.find({category});
+    res.render("listings/index.ejs",{allListings: categoryListings});
+};
+
 module.exports.renderNewForm=(req,res)=>{
     res.render("listings/new.ejs");
 };

@@ -34,6 +34,7 @@ router
         wrapAsync(listingController.destroyListing)
     );
 
+router.get("/category/:category",wrapAsync(listingController.getCategoryListing));
 
 //Edit Route
 router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEditForm));
