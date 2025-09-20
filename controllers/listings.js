@@ -14,6 +14,21 @@ module.exports.getCategoryListing = async(req,res) => {
     res.render("listings/index.ejs",{allListings: categoryListings});
 };
 
+module.exports.searchListing = async(req,res)=> {
+    const query = req.query.q;
+    if (!query) {
+        return res.redirect("/listings");
+    }
+    const listings = await Listing.find({
+        $or: [
+            { title: { $regex: query, $options: "i" } },
+            { location: { $regex: query, $options: "i" } },
+            { country: { $regex: query, $options: "i" } }
+        ]
+    });
+    res.render("listings/index", { allListings: listings });
+};
+
 module.exports.renderNewForm=(req,res)=>{
     res.render("listings/new.ejs");
 };
